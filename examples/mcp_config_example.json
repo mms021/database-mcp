@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "database-mcp": {
+      "command": "python",
+      "args": ["-m", "database_mcp.server"],
+      "env": {
+        "DATABASE_MCP_LOG_LEVEL": "INFO",
+        "DATABASE_MCP_LOG_FORMAT": "json",
+        "DATABASE_MCP_MAX_CONNECTIONS": "10",
+        "DATABASE_MCP_DOCKER_NETWORK": "database_mcp_network",
+        "DATABASE_MCP_ENABLE_QUERY_LOGGING": "true",
+        "DATABASE_MCP_ENABLE_METRICS": "true"
+      }
+    }
+  }
+}

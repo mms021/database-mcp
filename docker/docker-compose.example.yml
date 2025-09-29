@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: database_mcp_postgres
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - database_mcp_network
+
+  # MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: database_mcp_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-scripts/mysql-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - database_mcp_network
+
+  # ClickHouse
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: database_mcp_clickhouse
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks:
+      - database_mcp_network
+
+  # MongoDB
+  mongodb:
+    image: mongo:7
+    container_name: database_mcp_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpass
+      MONGO_INITDB_DATABASE: testdb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - database_mcp_network
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: database_mcp_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - database_mcp_network
+
+volumes:
+  postgres_data:
+  mysql_data:
+  clickhouse_data:
+  mongodb_data:
+  redis_data:
+
+networks:
+  database_mcp_network:
+    driver: bridge
