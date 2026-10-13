@@ -1,18 +1,24 @@
-# Database MCP
+# database-mcp
 
-🚀 MCP сервис для работы с различными базами данных
+**MCP-сервер, который даёт AI-ассистенту единый безопасный доступ к 7 СУБД: PostgreSQL, MySQL, ClickHouse, SQLite, MongoDB, Redis и Oracle.**
 
-## Описание
+*MCP server (FastMCP) giving AI assistants one safe interface to PostgreSQL, MySQL, ClickHouse, SQLite, MongoDB, Redis and Oracle, with read-only by default and Docker container management.*
 
-Database MCP предоставляет унифицированный интерфейс для подключения и работы с различными базами данных через Model Context Protocol (MCP). Поддерживает PostgreSQL, MySQL, ClickHouse, SQLite, MongoDB, Redis и Oracle.
+## Зачем
 
-## Основные возможности
+AI-ассистенту (Claude Code, Cursor) часто нужно заглянуть в базу: посмотреть схему, проверить данные, построить запрос. database-mcp даёт для этого одинаковые MCP-инструменты для любой СУБД и по умолчанию разрешает только чтение.
 
-- **Множественные БД**: PostgreSQL, MySQL, ClickHouse, SQLite, MongoDB, Redis, Oracle
-- **Гибкие подключения**: локальные, Docker, удаленные, облачные
-- **Безопасность**: система разрешений, защита от SQL injection
-- **Docker интеграция**: автоматическое управление контейнерами
-- **Мониторинг**: детальное логирование и метрики
+## Возможности
+
+- **10 MCP-инструментов:** подключение и отключение, `SELECT`-запросы, запись, произвольный SQL, список таблиц и схема, запуск, остановка и статус Docker-контейнеров с БД.
+- **7 коннекторов** с общим базовым интерфейсом: PostgreSQL, MySQL, ClickHouse, SQLite, MongoDB, Redis, Oracle.
+- **Безопасность по умолчанию:** запись (`allow_write`) и произвольный SQL (`allow_raw_sql`) выключены и включаются явно для каждого подключения.
+- **Docker-интеграция:** поднять нужную БД в контейнере прямо из ассистента.
+- **Структурированные логи** (structlog), конфигурация через Pydantic.
+
+## Стек
+
+Python 3.10+ · FastMCP · SQLAlchemy 2 · Pydantic 2 · structlog · Docker SDK · psycopg2, PyMySQL, clickhouse-driver, pymongo, redis-py, cx_Oracle
 
 ## Быстрый старт
 
@@ -66,9 +72,7 @@ pip install -r requirements.txt
 database-mcp/
 ├── src/database_mcp/          # Основной код
 │   ├── connectors/            # Коннекторы для БД
-│   ├── docker/               # Docker интеграция
-│   ├── security/             # Система безопасности
-│   ├── tools/                # MCP инструменты
+│   ├── tools/                # MCP-инструменты (query, metadata, management, docker)
 │   └── utils/                # Утилиты
 ├── tests/                    # Тесты
 ├── examples/                 # Примеры использования
